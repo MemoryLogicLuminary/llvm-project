@@ -113,6 +113,7 @@
 #include <iterator>
 #include <new>
 #include <utility>
+#include <limits>
 
 namespace llvm {
 
@@ -630,6 +631,8 @@ unsigned LeafNode<KeyT, ValT, N, Traits>::
 insertFrom(unsigned &Pos, unsigned Size, KeyT a, KeyT b, ValT y) {
   unsigned i = Pos;
   assert(i <= Size && Size <= N && "Invalid index");
+  if (a == std::numeric_limits<KeyT>::max() || b == std::numeric_limits<KeyT>::max()) 
+    return N + 1;
   assert(!Traits::stopLess(b, a) && "Invalid interval");
 
   // Verify the findFrom invariant.
